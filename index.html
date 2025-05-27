@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Carwan Goods Transport - Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carwan Goods Transport - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background: #f5f5f5;
+      background: #e3f2fd;
       color: #0d47a1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      justify-content: center;
+      height: 100vh;
     }
-    header {
-      background-color: #0d47a1;
-      color: white;
-      padding: 20px 0;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-    .container {
-      margin: 40px auto;
-      background-color: white;
-      padding: 30px;
+    .login-container {
+      background: white;
+      padding: 40px;
       border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
       width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2rem;
     }
     .form-group {
       margin-bottom: 20px;
@@ -46,8 +39,7 @@
       margin-bottom: 5px;
       color: #333;
     }
-    input,
-    textarea {
+    input {
       width: 100%;
       padding: 10px;
       border-radius: 8px;
@@ -62,283 +54,51 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 1rem;
+      margin-top: 10px;
+      width: 100%;
     }
     button:hover {
       background-color: #1565c0;
     }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Carwan Goods Admin Panel</h1>
-  </header>
-
-  <div class="container">
-    <h2>Add New Booking</h2>
-    <form id="bookingForm">
+  <div class="login-container">
+    <h1>Admin Login</h1>
+    <form id="loginForm">
       <div class="form-group">
-        <label for="customer">Customer Name</label>
-        <input type="text" id="customer" required />
+        <label for="username">Username</label>
+        <input type="text" id="username" required>
       </div>
       <div class="form-group">
-        <label for="cargo">Cargo Details</label>
-        <textarea id="cargo" rows="4" required></textarea>
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
       </div>
-      <div class="form-group">
-        <label for="pickup">Pickup Location</label>
-        <input type="text" id="pickup" required />
-      </div>
-      <div class="form-group">
-        <label for="destination">Destination</label>
-        <input type="text" id="destination" required />
-      </div>
-      <button type="submit">Submit Booking</button>
+      <button type="submit">Login</button>
+      <p id="errorMsg" class="error"></p>
     </form>
   </div>
 
   <script>
-    document.getElementById('bookingForm').addEventListener('submit', function (e) {
+    const loginForm = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      const customer = document.getElementById('customer').value;
-      const cargo = document.getElementById('cargo').value;
-      const pickup = document.getElementById('pickup').value;
-      const destination = document.getElementById('destination').value;
-      alert(
-        `Booking Added!\nCustomer: ${customer}\nCargo Details: ${cargo}\nPickup: ${pickup}\nDestination: ${destination}`
-      );
-      this.reset();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Dummy credentials for login
+      if (username === 'admin' && password === 'carwan123') {
+        window.location.href = 'admin.html';
+      } else {
+        errorMsg.textContent = 'Invalid username or password';
+      }
     });
   </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Carwan Goods Transport - Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: #f5f5f5;
-      color: #0d47a1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-    header {
-      background-color: #0d47a1;
-      color: white;
-      padding: 20px 0;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-    .container {
-      margin: 40px auto;
-      background-color: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
-      width: 90%;
-    }
-    .form-group {
-      margin-bottom: 20px;
-      text-align: left;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #333;
-    }
-    input,
-    textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    button {
-      background-color: #1976d2;
-      color: white;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    button:hover {
-      background-color: #1565c0;
-    }
-    .success-message {
-      color: green;
-      margin-top: 15px;
-      font-weight: 600;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Carwan Goods Admin Panel</h1>
-  </header>
-
-  <div class="container">
-    <h2>Add New Booking</h2>
-    <form id="bookingForm">
-      <div class="form-group">
-        <label for="customer">Customer Name</label>
-        <input type="text" id="customer" required />
-      </div>
-      <div class="form-group">
-        <label for="cargo">Cargo Details</label>
-        <textarea id="cargo" rows="4" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="pickup">Pickup Location</label>
-        <input type="text" id="pickup" required />
-      </div>
-      <div class="form-group">
-        <label for="destination">Destination</label>
-        <input type="text" id="destination" required />
-      </div>
-      <button type="submit">Submit Booking</button>
-    </form>
-    <p id="message" class="success-message"></p>
-  </div>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-  <script>
-    // Your Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
-      authDomain: "carwan-goods-transport.firebaseapp.com",
-      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
-      projectId: "carwan-goods-transport",
-      storageBucket: "carwan-goods-transport.appspot.com",
-      messagingSenderId: "632307912123",
-      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e",
-      measurementId: "G-WK7RQLNFT8"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
-    // Form submit event
-    const form = document.getElementById('bookingForm');
-    const messageEl = document.getElementById('message');
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-
-      const bookingData = {
-        customer: form.customer.value.trim(),
-        cargo: form.cargo.value.trim(),
-        pickup: form.pickup.value.trim(),
-        destination: form.destination.value.trim(),
-        timestamp: Date.now()
-      };
-
-      // Push booking data to Firebase Realtime Database
-      database.ref('bookings').push(bookingData)
-        .then(() => {
-          messageEl.textContent = 'Booking added successfully!';
-          form.reset();
-          setTimeout(() => {
-            messageEl.textContent = '';
-          }, 3000);
-        })
-        .catch(error => {
-          messageEl.textContent = 'Error adding booking: ' + error.message;
-          messageEl.style.color = 'red';
-        });
-    });
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Admin Panel - Carwan Goods</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 30px; }
-    input, textarea { width: 300px; margin: 10px 0; padding: 8px; }
-    button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    #msg { margin-top: 15px; color: green; }
-  </style>
-</head>
-<body>
-
-<h2>Carwan Goods Transport - Admin Panel</h2>
-<form id="bookingForm">
-  <input type="text" id="customer" placeholder="Customer Name" required /><br/>
-  <textarea id="cargo" placeholder="Cargo Details" required></textarea><br/>
-  <input type="text" id="pickup" placeholder="Pickup Location" required /><br/>
-  <input type="text" id="destination" placeholder="Destination" required /><br/>
-  <button type="submit">Submit Booking</button>
-</form>
-<p id="msg"></p>
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
-    authDomain: "carwan-goods-transport.firebaseapp.com",
-    databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
-    projectId: "carwan-goods-transport",
-    storageBucket: "carwan-goods-transport.appspot.com",
-    messagingSenderId: "632307912123",
-    appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e",
-    measurementId: "G-WK7RQLNFT8"
-  };
-
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
-
-  const form = document.getElementById('bookingForm');
-  const msg = document.getElementById('msg');
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-
-    const data = {
-      customer: form.customer.value.trim(),
-      cargo: form.cargo.value.trim(),
-      pickup: form.pickup.value.trim(),
-      destination: form.destination.value.trim(),
-      timestamp: Date.now()
-    };
-
-    database.ref('bookings').push(data)
-      .then(() => {
-        msg.textContent = "Booking saved successfully!";
-        msg.style.color = "green";
-        form.reset();
-      })
-      .catch(err => {
-        msg.textContent = "Error: " + err.message;
-        msg.style.color = "red";
-      });
-  });
-</script>
-
 </body>
 </html>
