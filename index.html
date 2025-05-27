@@ -1,103 +1,10 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Carwan Goods Transport</title>
-  <style>
-    body {
-      background-color: #f0f8ff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      color: #2c3e50;
-    }
-    p {
-      color: #555;
-    }
-  </style>
-</head>
-<body>
-  <h1>Welcome to Carwan Goods Transport</h1>
-  <p>Your reliable cargo partner.</p>
-</body>
-</html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carwan Goods Transport</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #e3f2fd, #bbdefb);
-      color: #0d47a1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-    }
-    header {
-      background-color: #0d47a1;
-      color: white;
-      padding: 20px 0;
-      width: 100%;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-    p {
-      margin-top: 10px;
-      font-size: 1.2rem;
-    }
-    .card {
-      background-color: white;
-      padding: 30px;
-      margin: 40px 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      max-width: 500px;
-    }
-    .button {
-      margin-top: 20px;
-      background-color: #1976d2;
-      color: white;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .button:hover {
-      background-color: #1565c0;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Carwan Goods Transport</h1>
-  </header>
-  <div class="card">
-    <h2>Welcome!</h2>
-    <p>Your reliable cargo partner is now online.</p>
-    <button class="button" onclick="alert('Coming Soon: Booking & Tracking System!')">Explore Services</button>
-  </div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Carwan Goods Transport - Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body {
       margin: 0;
@@ -139,7 +46,8 @@
       margin-bottom: 5px;
       color: #333;
     }
-    input, textarea {
+    input,
+    textarea {
       width: 100%;
       padding: 10px;
       border-radius: 8px;
@@ -170,7 +78,7 @@
     <form id="bookingForm">
       <div class="form-group">
         <label for="customer">Customer Name</label>
-        <input type="text" id="customer" required>
+        <input type="text" id="customer" required />
       </div>
       <div class="form-group">
         <label for="cargo">Cargo Details</label>
@@ -178,24 +86,27 @@
       </div>
       <div class="form-group">
         <label for="pickup">Pickup Location</label>
-        <input type="text" id="pickup" required>
+        <input type="text" id="pickup" required />
       </div>
       <div class="form-group">
         <label for="destination">Destination</label>
-        <input type="text" id="destination" required>
+        <input type="text" id="destination" required />
       </div>
       <button type="submit">Submit Booking</button>
     </form>
   </div>
 
   <script>
-    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    document.getElementById('bookingForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const customer = document.getElementById('customer').value;
       const cargo = document.getElementById('cargo').value;
       const pickup = document.getElementById('pickup').value;
       const destination = document.getElementById('destination').value;
-      alert(`Booking Added!\nCustomer: ${customer}\nPickup: ${pickup}\nDestination: ${destination}`);
+      alert(
+        `Booking Added!\nCustomer: ${customer}\nCargo Details: ${cargo}\nPickup: ${pickup}\nDestination: ${destination}`
+      );
+      this.reset();
     });
   </script>
 </body>
