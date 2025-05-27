@@ -114,10 +114,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Carwan Goods Transport - Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body {
       margin: 0;
@@ -159,7 +159,8 @@
       margin-bottom: 5px;
       color: #333;
     }
-    input, textarea {
+    input,
+    textarea {
       width: 100%;
       padding: 10px;
       border-radius: 8px;
@@ -178,6 +179,11 @@
     button:hover {
       background-color: #1565c0;
     }
+    .success-message {
+      color: green;
+      margin-top: 15px;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -190,7 +196,7 @@
     <form id="bookingForm">
       <div class="form-group">
         <label for="customer">Customer Name</label>
-        <input type="text" id="customer" required>
+        <input type="text" id="customer" required />
       </div>
       <div class="form-group">
         <label for="cargo">Cargo Details</label>
@@ -198,14 +204,67 @@
       </div>
       <div class="form-group">
         <label for="pickup">Pickup Location</label>
-        <input type="text" id="pickup" required>
+        <input type="text" id="pickup" required />
       </div>
       <div class="form-group">
         <label for="destination">Destination</label>
-        <input type="text" id="destination" required>
+        <input type="text" id="destination" required />
       </div>
       <button type="submit">Submit Booking</button>
     </form>
+    <p id="message" class="success-message"></p>
   </div>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
+  <script>
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
+      authDomain: "carwan-goods-transport.firebaseapp.com",
+      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
+      projectId: "carwan-goods-transport",
+      storageBucket: "carwan-goods-transport.appspot.com",
+      messagingSenderId: "632307912123",
+      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e",
+      measurementId: "G-WK7RQLNFT8"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Form submit event
+    const form = document.getElementById('bookingForm');
+    const messageEl = document.getElementById('message');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const bookingData = {
+        customer: form.customer.value.trim(),
+        cargo: form.cargo.value.trim(),
+        pickup: form.pickup.value.trim(),
+        destination: form.destination.value.trim(),
+        timestamp: Date.now()
+      };
+
+      // Push booking data to Firebase Realtime Database
+      database.ref('bookings').push(bookingData)
+        .then(() => {
+          messageEl.textContent = 'Booking added successfully!';
+          form.reset();
+          setTimeout(() => {
+            messageEl.textContent = '';
+          }, 3000);
+        })
+        .catch(error => {
+          messageEl.textContent = 'Error adding booking: ' + error.message;
+          messageEl.style.color = 'red';
+        });
+    });
+  </script>
+</body>
+</html>
