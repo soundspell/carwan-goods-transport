@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Carwan Goods Transport</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #7b4397, #dc2430);
+    color: white;
+    margin: 0; padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .container {
+    max-width: 600px;
+    margin: auto;
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 12px;
+  }
+  input, select, button, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: none;
+  }
+  button {
+    background: #ff6b6b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #ff4757;
+  }
+  .status-update {
+    margin-top: 20px;
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  .track-result {
+    margin-top: 15px;
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Carwan Goods Transport</h1>
+
+<div class="container">
+
+  <h2>Create Shipment</h2>
+  <input type="text" id="sender" placeholder="Sender Name" />
+  <input type="text" id="pickup" placeholder="Pickup Location" />
+  <input type="text" id="delivery" placeholder="Delivery Location" />
+  <textarea id="details" placeholder="Shipment Details"></textarea>
+  <button onclick="createShipment()">Create Shipment</button>
+
+  <hr/>
+
+  <h2>Track Shipment</h2>
+  <input type="text" id="trackId" placeholder="Enter Tracking ID" />
+  <button onclick="trackShipment()">Track</button>
+  <div id="trackResult" class="track-result"></div>
+
+  <hr/>
+
+  <h2>Admin: Update Shipment Status</h2>
+  <input type="text" id="adminTrackId" placeholder="Tracking ID" />
+  <select id="statusSelect">
+    <option value="Pending">Pending</option>
+    <option value="In Transit">In Transit</option>
+    <option value="Delivered">Delivered</option>
+  </select>
+  <button onclick="updateStatus()">Update Status</button>
+  <div id="updateMessage" class="status-update"></div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<script>
+  // Firebase configuration (your config)
+  const firebaseConfig = {
+    apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
+    authDomain: "carwan-goods-transport.firebaseapp.com",
+    databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
+    projectId: "carwan-goods-transport",
+    storageBucket: "carwan-goods-transport.firebasestorage.app",
+    messagingSenderId: "632307912123",
+    appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e",
+    measurementId: "G-WK7RQLNFT8"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  // Create Shipment
+  function createShipment() {
+    const sender = document.getElementById('sender').value.trim();
+    const pickup = document.getElementById('pickup').value.trim();
+    const delivery = document.getElementById('delivery').value.trim();
+    const details = document.getElementById('details').value.trim();
+
+    if(!sender || !pickup || !delivery) {
+      alert("Please fill all required fields (Sender, Pickup, Delivery).");
+      return;
+    }
+
+    const shipmentRef = database.ref('shipments').push();
+    const shipmentId = shipmentRef.key;
+
+    const shipmentData = {
+      sender,
+      pickup,
+      delivery,
+      details,
+      status: "Pending",
+      createdAt: new Date().toISOString()
+    };
+
+    shipmentRef.set(shipmentData)
+      .then(() => {
+        alert(`Shipment Created! Your Tracking ID is:\n${shipmentId}`);
+        // Clear form
+        document.getElementById('sender').value = '';
+        document.getElementById('pickup').value = '';
+        document.getElementById('delivery').value = '';
+        document.getElementById('details').value = '';
+      })
+      .catch(err => alert("Error creating shipment: " + err.message));
+  }
+
+  // Track Shipment
+  function trackShipment() {
+    const trackId = document.getElementById('trackId').value.trim();
+    const resultDiv = document.getElementById('trackResult');
+    resultDiv.innerHTML = "";
+
+    if(!trackId) {
+      alert("Please enter a Tracking ID.");
+      return;
+    }
+
+    database.ref('shipments/' + trackId).once('value')
+      .then(snapshot => {
+        if(snapshot.exists()) {
+          const data = snapshot.val();
+          resultDiv.innerHTML = `
+            <p><strong>Sender:</strong> ${data.sender}</p>
+            <p><strong>Pickup Location:</strong> ${data.pickup}</p>
+            <p><strong>Delivery Location:</strong> ${data.delivery}</p>
+            <p><strong>Status:</strong> ${data.status}</p>
+            <p><strong>Details:</strong> ${data.details || 'N/A'}</p>
+            <p><small><em>Created At: ${new Date(data.createdAt).toLocaleString()}</em></small></p>
+          `;
+        } else {
+          resultDiv.innerHTML = `<p style="color:#ff6b6b;">Tracking ID not found.</p>`;
+        }
+      })
+      .catch(err => alert("Error fetching shipment: " + err.message));
+  }
+
+  // Update Shipment Status (Admin)
+  function updateStatus() {
+    const id = document.getElementById('adminTrackId').value.trim();
+    const newStatus = document.getElementById('statusSelect').value;
+    const msgDiv = document.getElementById('updateMessage');
+    msgDiv.innerHTML = "";
+
+    if(!id) {
+      alert("Please enter Tracking ID to update.");
+      return;
+    }
+
+    database.ref('shipments/' + id).once('value')
+      .then(snapshot => {
+        if(snapshot.exists()) {
+          return database.ref('shipments/' + id).update({ status: newStatus });
+        } else {
+          throw new Error("Tracking ID not found.");
+        }
+      })
+      .then(() => {
+        msgDiv.innerHTML = `<p style="color:#7bed9f;">Status updated to "${newStatus}" successfully.</p>`;
+        // Clear input
+        document.getElementById('adminTrackId').value = '';
+      })
+      .catch(err => {
+        msgDiv.innerHTML = `<p style="color:#ff6b6b;">Error: ${err.message}</p>`;
+      });
+  }
+</script>
+
+</body>
+</html>
