@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Booking Successful - Carwan Goods Transport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 20px;
+    }
+    .success-container {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      max-width: 450px;
+      animation: fadeIn 1s ease forwards;
+    }
+    .success-container h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    .success-container p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .success-container a {
+      display: inline-block;
+      background: #ffca28;
+      color: #000;
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .success-container a:hover {
+      background: #ffc107;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="success-container">
+    <h1>✨ Booking Confirmed!</h1>
+    <p>Thank you for choosing Carwan Goods Transport.<br>Your cargo booking has been successfully received.</p>
+    <a href="booking.html">Make Another Booking</a>
+  </div>
+</body>
+</html>
