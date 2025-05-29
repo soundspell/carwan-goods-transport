@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carwan Goods Transport - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #4a148c;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #6a1b9a;
+      padding: 10px 0;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      flex: 1;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    footer {
+      background: #4a148c;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+    }
+    .button {
+      background-color: #ffca28;
+      color: #000;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+    .button:hover {
+      background-color: #ffc107;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to Carwan Goods Transport</h1>
+  </header>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+    <a href="login.html">Admin Login</a>
+  </nav>
+
+  <main>
+    <h2>Your Reliable Partner in Cargo Transportation</h2>
+    <p>We provide fast, safe, and affordable cargo transport solutions across Pakistan.</p>
+    <button class="button" onclick="location.href='booking.html'">Book Now</button>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Carwan Goods Transport. All rights reserved.</p>
+  </footer>
+</body>
+</html>
