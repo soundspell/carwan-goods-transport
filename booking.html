@@ -1,77 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carwan Goods Transport - Booking</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stylish Booking - Carwan Goods Transport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
+      authDomain: "carwan-goods-transport.firebaseapp.com",
+      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
+      projectId: "carwan-goods-transport",
+      storageBucket: "carwan-goods-transport.appspot.com",
+      messagingSenderId: "632307912123",
+      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const bookingsRef = ref(db, 'bookings');
+
+    const bookingForm = document.getElementById('bookingForm');
+    const bookingList = document.getElementById('bookingList');
+    const searchInput = document.getElementById('searchInput');
+
+    function generateSlipNumber() {
+      return 'SLIP-' + Date.now();
+    }
+
+    function renderBookings(snapshot) {
+      bookingList.innerHTML = '';
+      const searchVal = searchInput.value.toLowerCase();
+
+      const bookingsArray = [];
+      snapshot.forEach(child => {
+        bookingsArray.push({ key: child.key, ...child.val() });
+      });
+
+      bookingsArray.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      bookingsArray.forEach(booking => {
+        if (
+          !searchVal ||
+          booking.sender.toLowerCase().includes(searchVal) ||
+          booking.receiver.toLowerCase().includes(searchVal) ||
+          booking.pickup.toLowerCase().includes(searchVal) ||
+          booking.drop.toLowerCase().includes(searchVal) ||
+          booking.slipNumber.toLowerCase().includes(searchVal)
+        ) {
+          const div = document.createElement('div');
+          div.classList.add('booking');
+          div.innerHTML = `
+            <div class="header">
+              <h3>Slip #: <span>${booking.slipNumber}</span></h3>
+              <p class="date">${booking.date}</p>
+            </div>
+            <div class="details">
+              <p><strong>Sender:</strong> ${booking.sender}</p>
+              <p><strong>Receiver:</strong> ${booking.receiver}</p>
+              <p><strong>Pickup:</strong> ${booking.pickup}</p>
+              <p><strong>Drop:</strong> ${booking.drop}</p>
+              <p><strong>Details:</strong> ${booking.details || '-'}</p>
+            </div>
+            <button class="print-btn" onclick="printSlip('${booking.key}')">Print Slip</button>
+          `;
+          bookingList.appendChild(div);
+        }
+      });
+    }
+
+    onValue(bookingsRef, snapshot => renderBookings(snapshot));
+
+    bookingForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const date = document.getElementById('date').value;
+      const sender = document.getElementById('sender').value.trim();
+      const receiver = document.getElementById('receiver').value.trim();
+      const pickup = document.getElementById('pickup').value.trim();
+      const drop = document.getElementById('drop').value.trim();
+      const details = document.getElementById('details').value.trim();
+      const slipNumber = generateSlipNumber();
+
+      push(bookingsRef, { date, sender, receiver, pickup, drop, details, slipNumber });
+
+      bookingForm.reset();
+    });
+
+    searchInput.addEventListener('input', () => {
+      onValue(bookingsRef, snapshot => renderBookings(snapshot));
+    });
+
+    window.printSlip = function(key) {
+      onValue(ref(db, 'bookings/' + key), snapshot => {
+        const b = snapshot.val();
+        const printWindow = window.open('', '', 'width=600,height=700');
+        printWindow.document.write(`
+          <html>
+          <head>
+            <title>Booking Slip</title>
+            <style>
+              body { font-family: 'Poppins', sans-serif; padding: 30px; }
+              h2 { color: #007BFF; }
+              p { font-size: 16px; margin: 8px 0; }
+              strong { color: #333; }
+            </style>
+          </head>
+          <body>
+            <h2>Booking Slip - ${b.slipNumber}</h2>
+            <p><strong>Date:</strong> ${b.date}</p>
+            <p><strong>Sender:</strong> ${b.sender}</p>
+            <p><strong>Receiver:</strong> ${b.receiver}</p>
+            <p><strong>Pickup Location:</strong> ${b.pickup}</p>
+            <p><strong>Drop Location:</strong> ${b.drop}</p>
+            <p><strong>Details:</strong> ${b.details || '-'}</p>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+      }, { onlyOnce: true });
+    }
+  </script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
       color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
       padding: 20px;
+      max-width: 720px;
+      margin: auto;
+      min-height: 100vh;
     }
-    .booking-container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 40px;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      animation: fadeIn 1s ease;
-    }
-    .booking-container h2 {
+    h1 {
       text-align: center;
       margin-bottom: 30px;
       font-weight: 600;
-      font-size: 1.8rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
-    input, textarea, button {
+    form {
+      background: rgba(255,255,255,0.1);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+      backdrop-filter: blur(8px);
+    }
+    form input, form textarea {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: none;
+      padding: 14px 15px;
+      margin: 12px 0;
       border-radius: 10px;
+      border: none;
       font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
-    }
-    input::placeholder, textarea::placeholder {
-      color: #999;
-    }
-    button {
-      background: #ffca28;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
       transition: background 0.3s ease;
     }
-    button:hover {
-      background: #ffc107;
+    form input::placeholder,
+    form textarea::placeholder {
+      color: #ddd;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    form input:focus, form textarea:focus {
+      background: rgba(255, 255, 255, 0.35);
     }
-  </style>
-</head>
-<body>
-  <div class="booking-container">
-    <h2>📦 Book Your Cargo</h2>
-    <form>
-      <input type="text" placeholder="Full Name" required>
-      <input type="email" placeholder="Email Address" required>
-      <input type="text" placeholder="Pickup Location" required>
-      <input type="text" placeholder="Drop-off Location" required>
-      <textarea rows="4" placeholder="Additional Details (Optional)"></textarea>
-      <button type="submit">🚚 Submit Booking</button>
-    </form>
-  </div>
-</body>
-</html>
+    form button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: #ff4b1f;
+      background: linear-gradient(to right, #ff9068, #fd746c);
+      font-weight: 600;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: white;
+      transition: background 0.3s ease;
+      box-shadow: 0 6px 15px rgba(253, 116, 108, 0.5);
+    }
+    form button:hover {
+      background: linear-gradient(to right, #fd746c, #ff9068);
+      box-shadow: 0 8px 18px rgba(253, 116, 108, 0.8);
+    }
+    #searchInput {
+      width: 100%;
+      padding: 14px 15px;
+      border-radius: 12px;
+      border: none;
+      margin-bottom: 25px;
+      font-size: 1rem;
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+    #searchInput::placeholder {
+      color: #eee;
+    }
+    #searchInput:focus {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    .booking {
+      background: rgba(255,255,255,0.15);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .booking:hover {
+      transform: translateY(-5px);
+     
