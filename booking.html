@@ -5,125 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Stylish Booking - Carwan Goods Transport</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
-      authDomain: "carwan-goods-transport.firebaseapp.com",
-      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
-      projectId: "carwan-goods-transport",
-      storageBucket: "carwan-goods-transport.appspot.com",
-      messagingSenderId: "632307912123",
-      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const bookingsRef = ref(db, 'bookings');
-
-    const bookingForm = document.getElementById('bookingForm');
-    const bookingList = document.getElementById('bookingList');
-    const searchInput = document.getElementById('searchInput');
-
-    function generateSlipNumber() {
-      return 'SLIP-' + Date.now();
-    }
-
-    function renderBookings(snapshot) {
-      bookingList.innerHTML = '';
-      const searchVal = searchInput.value.toLowerCase();
-
-      const bookingsArray = [];
-      snapshot.forEach(child => {
-        bookingsArray.push({ key: child.key, ...child.val() });
-      });
-
-      bookingsArray.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      bookingsArray.forEach(booking => {
-        if (
-          !searchVal ||
-          booking.sender.toLowerCase().includes(searchVal) ||
-          booking.receiver.toLowerCase().includes(searchVal) ||
-          booking.pickup.toLowerCase().includes(searchVal) ||
-          booking.drop.toLowerCase().includes(searchVal) ||
-          booking.slipNumber.toLowerCase().includes(searchVal)
-        ) {
-          const div = document.createElement('div');
-          div.classList.add('booking');
-          div.innerHTML = `
-            <div class="header">
-              <h3>Slip #: <span>${booking.slipNumber}</span></h3>
-              <p class="date">${booking.date}</p>
-            </div>
-            <div class="details">
-              <p><strong>Sender:</strong> ${booking.sender}</p>
-              <p><strong>Receiver:</strong> ${booking.receiver}</p>
-              <p><strong>Pickup:</strong> ${booking.pickup}</p>
-              <p><strong>Drop:</strong> ${booking.drop}</p>
-              <p><strong>Details:</strong> ${booking.details || '-'}</p>
-            </div>
-            <button class="print-btn" onclick="printSlip('${booking.key}')">Print Slip</button>
-          `;
-          bookingList.appendChild(div);
-        }
-      });
-    }
-
-    onValue(bookingsRef, snapshot => renderBookings(snapshot));
-
-    bookingForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const date = document.getElementById('date').value;
-      const sender = document.getElementById('sender').value.trim();
-      const receiver = document.getElementById('receiver').value.trim();
-      const pickup = document.getElementById('pickup').value.trim();
-      const drop = document.getElementById('drop').value.trim();
-      const details = document.getElementById('details').value.trim();
-      const slipNumber = generateSlipNumber();
-
-      push(bookingsRef, { date, sender, receiver, pickup, drop, details, slipNumber });
-
-      bookingForm.reset();
-    });
-
-    searchInput.addEventListener('input', () => {
-      onValue(bookingsRef, snapshot => renderBookings(snapshot));
-    });
-
-    window.printSlip = function(key) {
-      onValue(ref(db, 'bookings/' + key), snapshot => {
-        const b = snapshot.val();
-        const printWindow = window.open('', '', 'width=600,height=700');
-        printWindow.document.write(`
-          <html>
-          <head>
-            <title>Booking Slip</title>
-            <style>
-              body { font-family: 'Poppins', sans-serif; padding: 30px; }
-              h2 { color: #007BFF; }
-              p { font-size: 16px; margin: 8px 0; }
-              strong { color: #333; }
-            </style>
-          </head>
-          <body>
-            <h2>Booking Slip - ${b.slipNumber}</h2>
-            <p><strong>Date:</strong> ${b.date}</p>
-            <p><strong>Sender:</strong> ${b.sender}</p>
-            <p><strong>Receiver:</strong> ${b.receiver}</p>
-            <p><strong>Pickup Location:</strong> ${b.pickup}</p>
-            <p><strong>Drop Location:</strong> ${b.drop}</p>
-            <p><strong>Details:</strong> ${b.details || '-'}</p>
-          </body>
-          </html>
-        `);
-        printWindow.document.close();
-        printWindow.print();
-      }, { onlyOnce: true });
-    }
-  </script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -172,7 +53,6 @@
       padding: 14px;
       border: none;
       border-radius: 12px;
-      background: #ff4b1f;
       background: linear-gradient(to right, #ff9068, #fd746c);
       font-weight: 600;
       font-size: 1.2rem;
@@ -214,4 +94,157 @@
     }
     .booking:hover {
       transform: translateY(-5px);
-     
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .header h3 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    .header .date {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .details p {
+      margin: 6px 0;
+      font-size: 1rem;
+    }
+    .print-btn {
+      margin-top: 15px;
+      background: #00b894;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,184,148,0.5);
+      transition: background 0.3s ease;
+    }
+    .print-btn:hover {
+      background: #019875;
+      box-shadow: 0 6px 15px rgba(1,152,117,0.7);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Booking Management</h1>
+
+  <form id="bookingForm">
+    <input type="date" id="date" required />
+    <input type="text" id="sender" placeholder="Sender Name" required />
+    <input type="text" id="receiver" placeholder="Receiver Name" required />
+    <input type="text" id="pickup" placeholder="Pickup Location" required />
+    <input type="text" id="drop" placeholder="Drop Location" required />
+    <textarea id="details" placeholder="Details (Optional)" rows="3"></textarea>
+    <button type="submit">Add Booking</button>
+  </form>
+
+  <input type="text" id="searchInput" placeholder="Search bookings by sender, receiver, slip #" />
+
+  <div id="bookingList"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    // Your Firebase config - update if needed
+    const firebaseConfig = {
+      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
+      authDomain: "carwan-goods-transport.firebaseapp.com",
+      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
+      projectId: "carwan-goods-transport",
+      storageBucket: "carwan-goods-transport.appspot.com",
+      messagingSenderId: "632307912123",
+      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const bookingsRef = ref(db, 'bookings');
+
+    const bookingForm = document.getElementById('bookingForm');
+    const bookingList = document.getElementById('bookingList');
+    const searchInput = document.getElementById('searchInput');
+
+    // Generate unique slip number with timestamp + random suffix
+    function generateSlipNumber() {
+      return 'SLIP-' + Date.now() + '-' + Math.floor(Math.random() * 900 + 100);
+    }
+
+    // Render bookings, filter by search term
+    function renderBookings(snapshot) {
+      bookingList.innerHTML = '';
+      const searchVal = searchInput.value.toLowerCase();
+
+      const bookingsArray = [];
+      snapshot.forEach(childSnap => {
+        bookingsArray.push({ key: childSnap.key, ...childSnap.val() });
+      });
+
+      // Sort by date descending (most recent first)
+      bookingsArray.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      bookingsArray.forEach(booking => {
+        if (
+          !searchVal ||
+          booking.sender.toLowerCase().includes(searchVal) ||
+          booking.receiver.toLowerCase().includes(searchVal) ||
+          booking.pickup.toLowerCase().includes(searchVal) ||
+          booking.drop.toLowerCase().includes(searchVal) ||
+          booking.slipNumber.toLowerCase().includes(searchVal)
+        ) {
+          const div = document.createElement('div');
+          div.classList.add('booking');
+          div.innerHTML = `
+            <div class="header">
+              <h3>Slip #: <span>${booking.slipNumber}</span></h3>
+              <p class="date">${booking.date}</p>
+            </div>
+            <div class="details">
+              <p><strong>Sender:</strong> ${booking.sender}</p>
+              <p><strong>Receiver:</strong> ${booking.receiver}</p>
+              <p><strong>Pickup:</strong> ${booking.pickup}</p>
+              <p><strong>Drop:</strong> ${booking.drop}</p>
+              <p><strong>Details:</strong> ${booking.details || '-'}</p>
+            </div>
+            <button class="print-btn" data-key="${booking.key}">Print Slip</button>
+          `;
+          bookingList.appendChild(div);
+        }
+      });
+
+      // Attach print event handlers after rendering
+      document.querySelectorAll('.print-btn').forEach(button => {
+        button.onclick = () => {
+          const key = button.getAttribute('data-key');
+          printSlip(key);
+        };
+      });
+    }
+
+    // Listen for changes in bookings and render list
+    onValue(bookingsRef, snapshot => {
+      renderBookings(snapshot);
+    });
+
+    // Form submit: add booking
+    bookingForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const date = document.getElementById('date').value;
+      const sender = document.getElementById('sender').value.trim();
+      const receiver = document.getElementById('receiver').value.trim();
+      const pickup = document.getElementById('pickup').value.trim();
+      const drop = document.getElementById('drop').value.trim();
+      const details = document.getElementById('details').value.trim();
+      const slipNumber = generateSlipNumber();
+
+      if(!date || !sender || !receiver || !pickup || !drop) {
+        alert('Please fill in
