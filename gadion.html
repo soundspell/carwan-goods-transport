@@ -203,3 +203,222 @@
   </div>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gadon - Carwan Goods Transport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
+      authDomain: "carwan-goods-transport.firebaseapp.com",
+      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
+      projectId: "carwan-goods-transport",
+      storageBucket: "carwan-goods-transport.appspot.com",
+      messagingSenderId: "632307912123",
+      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const gadonContainer = document.getElementById("gadonContainer");
+    const gadonForm = document.getElementById("gadonForm");
+    const searchInput = document.getElementById("searchInput");
+
+    const gadonRef = ref(db, 'gadion');
+
+    function renderData(snapshot) {
+      gadonContainer.innerHTML = '';
+      const searchVal = searchInput.value.toLowerCase();
+
+      snapshot.forEach((child) => {
+        const g = child.val();
+        const key = child.key;
+
+        if (
+          !searchVal ||
+          g.name.toLowerCase().includes(searchVal) ||
+          (g.truckNumber && g.truckNumber.toLowerCase().includes(searchVal))
+        ) {
+          const div = document.createElement('div');
+          div.className = 'truck';
+          div.innerHTML = `
+            <h3>${g.name} - Registration: ${g.registration}</h3>
+            <p>Status: <span class="status ${g.status === 'In Transit' ? 'busy' : ''}">${g.status}</span></p>
+            <p class="mode">Travel Mode: ${g.mode}</p>
+            <p>Truck No: ${g.truckNumber || 'N/A'}</p>
+            <p>Location: ${g.location || 'Other'}</p>
+            <p><strong>Booking:</strong> ${g.booking || 'No booking info'}</p>
+            <p><strong>Payment:</strong> ${g.payment || 'No payment info'}</p>
+            <button onclick="window.print()">Print</button>
+            <button onclick="deleteTruck('${key}')">Delete</button>
+            <a href="data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(g))}" download="${g.name.replace(/\s+/g, '_')}_info.json">
+              <button>Download</button>
+            </a>
+          `;
+          gadonContainer.appendChild(div);
+        }
+      });
+    }
+
+    onValue(gadonRef, (snapshot) => renderData(snapshot));
+
+    gadonForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const registration = document.getElementById("registration").value;
+      const status = document.getElementById("status").value;
+      const mode = document.getElementById("mode").value;
+      const truckNumber = document.getElementById("truckNumber").value;
+      const location = document.getElementById("location").value;
+      const booking = document.getElementById("booking").value;
+      const payment = document.getElementById("payment").value;
+
+      push(gadonRef, {
+        name,
+        registration,
+        status,
+        mode,
+        truckNumber,
+        location,
+        booking,
+        payment
+      });
+
+      gadonForm.reset();
+    });
+
+    searchInput.addEventListener("input", () => {
+      onValue(gadonRef, (snapshot) => renderData(snapshot));
+    });
+
+    window.deleteTruck = function (key) {
+      remove(ref(db, 'gadion/' + key));
+    }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #e3f2fd;
+      color: #0d47a1;
+    }
+    header {
+      background-color: #1565c0;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 2rem;
+    }
+    .container {
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+    }
+    .truck {
+      background-color: white;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .truck:hover {
+      transform: scale(1.02);
+    }
+    .truck h3 {
+      margin: 0 0 10px 0;
+    }
+    .status {
+      font-weight: bold;
+      color: green;
+    }
+    .status.busy {
+      color: red;
+    }
+    .mode {
+      margin-top: 10px;
+      font-style: italic;
+      color: #444;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    form input, form select, form button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #90caf9;
+      font-size: 1rem;
+    }
+    form button {
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    form button:hover {
+      background-color: #0d47a1;
+    }
+    .search-box {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 8px;
+      border: 1px solid #90caf9;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>Gadon List - Carwan Goods Transport</header>
+  <div class="container">
+    <h2>Add New Truck</h2>
+    <form id="gadonForm">
+      <input type="text" id="name" placeholder="Driver/Truck Name" required />
+      <input type="text" id="registration" placeholder="Registration Number" required />
+      <select id="status">
+        <option value="Available">Available</option>
+        <option value="In Transit">In Transit</option>
+      </select>
+      <select id="mode">
+        <option value="By Road">By Road</option>
+        <option value="By Railway">By Railway</option>
+      </select>
+      <input type="text" id="truckNumber" placeholder="Truck Number (Optional)" />
+      <select id="location">
+        <option value="Karachi">Karachi</option>
+        <option value="Lahore">Lahore</option>
+        <option value="Other">Other</option>
+      </select>
+      <input type="text" id="booking" placeholder="Booking Details (Optional)" />
+      <input type="text" id="payment" placeholder="Payment Details (Optional)" />
+      <button type="submit">Add Truck</button>
+    </form>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search by Driver or Truck Name or Number..." />
+    </div>
+
+    <h2>Registered Trucks with Booking Info</h2>
+    <div id="gadonContainer"></div>
+  </div>
+</body>
+</html>
