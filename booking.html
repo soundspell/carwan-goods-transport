@@ -190,5 +190,45 @@
   <button onclick="window.print()">Print Slip</button>
   <button onclick="downloadSlip(this)">Download Slip</button>
 </div>
+  function displayBooking(data) {
+  return `
+    <div class="booking">
+      <h2>Booking Slip</h2>
+      <p><strong>Slip #:</strong> ${data.slipNumber}</p>
+      <p><strong>Date:</strong> ${data.date}</p>
+      <p><strong>Sender:</strong> ${data.sender}</p>
+      <p><strong>Receiver:</strong> ${data.receiver}</p>
+      <p><strong>Pickup Location:</strong> ${data.pickup}</p>
+      <p><strong>Drop Location:</strong> ${data.drop}</p>
+      <p><strong>Details:</strong> ${data.details}</p>
+      <p><strong>GD Copy:</strong> ${data.gdCopy}</p>
+      <p><strong>Local Charges:</strong> ${data.localCharges}</p>
+      <p><strong>Other Charges:</strong> ${data.otherCharges}</p>
+      <div class="slip-actions">
+        <button onclick="printThis(this)">🖨️ Print</button>
+        <button onclick="downloadSlip(this)">⬇️ Download</button>
+      </div>
+    </div>`;
+window.printThis = function (button) {
+  const slip = button.closest(".booking").innerHTML;
+  const win = window.open('', '', 'height=700,width=900');
+  win.document.write('<html><head><title>Booking Slip</title></head><body>');
+  win.document.write(slip);
+  win.document.write('</body></html>');
+  win.document.close();
+  win.print();
+};
+
+window.downloadSlip = function (button) {
+  const slip = button.closest(".booking").outerHTML;
+  const blob = new Blob([`
+    <html><head><title>Booking Slip</title></head><body>${slip}</body></html>
+  `], { type: "text/html" });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "booking-slip.html";
+  a.click();
+};
 </body>
 </html>
