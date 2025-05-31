@@ -190,17 +190,5 @@
   <button onclick="window.print()">Print Slip</button>
   <button onclick="downloadSlip(this)">Download Slip</button>
 </div>
-window.downloadSlip = function (button) {
-  const slip = button.closest(".booking");
-  const content = slip.innerHTML;
-  const blob = new Blob([`
-    <html><head><title>Booking Slip</title></head><body>${content}</body></html>
-  `], { type: "text/html" });
-
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "booking-slip.html";
-  a.click();
-};
 </body>
 </html>
