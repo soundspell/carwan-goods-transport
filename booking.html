@@ -219,17 +219,5 @@ window.printThis = function (button) {
   win.document.close();
   win.print();
 };
-
-window.downloadSlip = function (button) {
-  const slip = button.closest(".booking").outerHTML;
-  const blob = new Blob([`
-    <html><head><title>Booking Slip</title></head><body>${slip}</body></html>
-  `], { type: "text/html" });
-
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "booking-slip.html";
-  a.click();
-};
 </body>
 </html>
