@@ -6,118 +6,6 @@
   <title>Booking - Carwan Goods Transport</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
-      authDomain: "carwan-goods-transport.firebaseapp.com",
-      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
-      projectId: "carwan-goods-transport",
-      storageBucket: "carwan-goods-transport.appspot.com",
-      messagingSenderId: "632307912123",
-      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const bookingRef = ref(db, 'bookings');
-
-    const bookingForm = document.getElementById('bookingForm');
-    const bookingContainer = document.getElementById('bookingContainer');
-    const searchInput = document.getElementById('searchInput');
-    const totalCount = document.getElementById('totalCount');
-
-    function generateSlipNumber() {
-      return 'SLIP-' + Math.floor(100000 + Math.random() * 900000);
-    }
-
-    bookingForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const date = document.getElementById("date").value;
-      const sender = document.getElementById("sender").value;
-      const receiver = document.getElementById("receiver").value;
-      const pickup = document.getElementById("pickup").value;
-      const drop = document.getElementById("drop").value;
-      const details = document.getElementById("details").value;
-      const gdCopy = document.getElementById("gdCopy").value;
-      const localCharges = document.getElementById("localCharges").value;
-      const otherCharges = document.getElementById("otherCharges").value;
-      const slipNumber = generateSlipNumber();
-
-      const data = {
-        date,
-        sender,
-        receiver,
-        pickup,
-        drop,
-        details,
-        gdCopy,
-        localCharges,
-        otherCharges,
-        slipNumber
-      };
-
-      push(bookingRef, data).then(() => {
-        alert("Booking added successfully!");
-        bookingForm.reset();
-      });
-    });
-
-    function displayBooking(data) {
-      return `
-        <div class="booking glass-card">
-          <div class="booking-header">
-            <h2>📦 Booking Slip</h2>
-            <span><strong>Slip #:</strong> ${data.slipNumber}</span>
-          </div>
-          <div class="booking-body">
-            <p><strong>📅 Date:</strong> ${data.date}</p>
-            <p><strong>👤 Sender:</strong> ${data.sender}</p>
-            <p><strong>📞 Receiver:</strong> ${data.receiver}</p>
-            <p><strong>📍 Pickup:</strong> ${data.pickup}</p>
-            <p><strong>📦 Drop:</strong> ${data.drop}</p>
-            <p><strong>📑 Details:</strong> ${data.details}</p>
-            <p><strong>📂 GD Copy:</strong> ${data.gdCopy}</p>
-            <p><strong>💸 Local Charges:</strong> ${data.localCharges}</p>
-            <p><strong>🧾 Other Charges:</strong> ${data.otherCharges}</p>
-          </div>
-          <div class="slip-actions">
-            <button onclick="window.print()">🖨️ Print</button>
-            <button onclick="downloadSlipAsPDF(this)">⬇️ Download</button>
-          </div>
-        </div>`;
-    }
-
-    window.downloadSlipAsPDF = function(button) {
-      const slipDiv = button.closest('.booking');
-      html2pdf().from(slipDiv).save(`Slip-${Date.now()}.pdf`);
-    }
-
-    onValue(bookingRef, (snapshot) => {
-      let allData = [];
-      snapshot.forEach((child) => {
-        allData.push(child.val());
-      });
-
-      function render(dataArray) {
-        bookingContainer.innerHTML = dataArray.map(displayBooking).join('');
-      }
-
-      render(allData);
-      totalCount.textContent = `Total Bookings: ${allData.length}`;
-
-      searchInput.addEventListener("input", () => {
-        const searchValue = searchInput.value.toLowerCase();
-        const filtered = allData.filter(b =>
-          b.slipNumber.toLowerCase().includes(searchValue) ||
-          b.sender.toLowerCase().includes(searchValue)
-        );
-        render(filtered);
-      });
-    });
-  </script>
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -233,127 +121,118 @@
   <input type="text" id="searchInput" placeholder="Search by Slip Number or Sender Name" />
   <h3 id="totalCount">Total Bookings: 0</h3>
   <div id="bookingContainer"></div>
-  <!-- Inside your HTML -->
-<body>
-  <!-- ... your body content ... -->
 
-  <!-- Instead of inline module, load external script -->
-  <script type="module" src="firebase-booking.js"></script>
-</body>
   <script type="module">
-  document.addEventListener("DOMContentLoaded", () => {
-    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js").then(({ initializeApp }) => {
-      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({ getDatabase, ref, push, onValue }) => {
-        const firebaseConfig = {
-          apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
-          authDomain: "carwan-goods-transport.firebaseapp.com",
-          databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
-          projectId: "carwan-goods-transport",
-          storageBucket: "carwan-goods-transport.appspot.com",
-          messagingSenderId: "632307912123",
-          appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e"
-        };
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const bookingRef = ref(db, 'bookings');
+    const firebaseConfig = {
+      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
+      authDomain: "carwan-goods-transport.firebaseapp.com",
+      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
+      projectId: "carwan-goods-transport",
+      storageBucket: "carwan-goods-transport.appspot.com",
+      messagingSenderId: "632307912123",
+      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e"
+    };
 
-        const bookingForm = document.getElementById('bookingForm');
-        const bookingContainer = document.getElementById('bookingContainer');
-        const searchInput = document.getElementById('searchInput');
-        const totalCount = document.getElementById('totalCount');
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const bookingRef = ref(db, 'bookings');
 
-        function generateSlipNumber() {
-          return 'SLIP-' + Math.floor(100000 + Math.random() * 900000);
-        }
+    const bookingForm = document.getElementById('bookingForm');
+    const bookingContainer = document.getElementById('bookingContainer');
+    const searchInput = document.getElementById('searchInput');
+    const totalCount = document.getElementById('totalCount');
 
-        bookingForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          const date = document.getElementById("date").value;
-          const sender = document.getElementById("sender").value;
-          const receiver = document.getElementById("receiver").value;
-          const pickup = document.getElementById("pickup").value;
-          const drop = document.getElementById("drop").value;
-          const details = document.getElementById("details").value;
-          const gdCopy = document.getElementById("gdCopy").value;
-          const localCharges = document.getElementById("localCharges").value;
-          const otherCharges = document.getElementById("otherCharges").value;
-          const slipNumber = generateSlipNumber();
+    function generateSlipNumber() {
+      return 'SLIP-' + Math.floor(100000 + Math.random() * 900000);
+    }
 
-          const data = {
-            date,
-            sender,
-            receiver,
-            pickup,
-            drop,
-            details,
-            gdCopy,
-            localCharges,
-            otherCharges,
-            slipNumber
-          };
+    bookingForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const date = document.getElementById("date").value;
+      const sender = document.getElementById("sender").value;
+      const receiver = document.getElementById("receiver").value;
+      const pickup = document.getElementById("pickup").value;
+      const drop = document.getElementById("drop").value;
+      const details = document.getElementById("details").value;
+      const gdCopy = document.getElementById("gdCopy").value;
+      const localCharges = document.getElementById("localCharges").value;
+      const otherCharges = document.getElementById("otherCharges").value;
+      const slipNumber = generateSlipNumber();
 
-          push(bookingRef, data).then(() => {
-            alert("Booking added successfully!");
-            bookingForm.reset();
-          });
-        });
+      const data = {
+        date,
+        sender,
+        receiver,
+        pickup,
+        drop,
+        details,
+        gdCopy,
+        localCharges,
+        otherCharges,
+        slipNumber
+      };
 
-        function displayBooking(data) {
-          return `
-            <div class="booking glass-card">
-              <div class="booking-header">
-                <h2>📦 Booking Slip</h2>
-                <span><strong>Slip #:</strong> ${data.slipNumber}</span>
-              </div>
-              <div class="booking-body">
-                <p><strong>📅 Date:</strong> ${data.date}</p>
-                <p><strong>👤 Sender:</strong> ${data.sender}</p>
-                <p><strong>📞 Receiver:</strong> ${data.receiver}</p>
-                <p><strong>📍 Pickup:</strong> ${data.pickup}</p>
-                <p><strong>📦 Drop:</strong> ${data.drop}</p>
-                <p><strong>📑 Details:</strong> ${data.details}</p>
-                <p><strong>📂 GD Copy:</strong> ${data.gdCopy}</p>
-                <p><strong>💸 Local Charges:</strong> ${data.localCharges}</p>
-                <p><strong>🧾 Other Charges:</strong> ${data.otherCharges}</p>
-              </div>
-              <div class="slip-actions">
-                <button onclick="window.print()">🖨️ Print</button>
-                <button onclick="downloadSlipAsPDF(this)">⬇️ Download</button>
-              </div>
-            </div>`;
-        }
-
-        window.downloadSlipAsPDF = function(button) {
-          const slipDiv = button.closest('.booking');
-          html2pdf().from(slipDiv).save(`Slip-${Date.now()}.pdf`);
-        }
-
-        onValue(bookingRef, (snapshot) => {
-          let allData = [];
-          snapshot.forEach((child) => {
-            allData.push(child.val());
-          });
-
-          function render(dataArray) {
-            bookingContainer.innerHTML = dataArray.map(displayBooking).join('');
-          }
-
-          render(allData);
-          totalCount.textContent = `Total Bookings: ${allData.length}`;
-
-          searchInput.addEventListener("input", () => {
-            const searchValue = searchInput.value.toLowerCase();
-            const filtered = allData.filter(b =>
-              b.slipNumber.toLowerCase().includes(searchValue) ||
-              b.sender.toLowerCase().includes(searchValue)
-            );
-            render(filtered);
-          });
-        });
+      push(bookingRef, data).then(() => {
+        alert("Booking added successfully!");
+        bookingForm.reset();
       });
     });
-  });
-</script>
+
+    function displayBooking(data) {
+      return `
+        <div class="booking glass-card">
+          <div class="booking-header">
+            <h2>📦 Booking Slip</h2>
+            <span><strong>Slip #:</strong> ${data.slipNumber}</span>
+          </div>
+          <div class="booking-body">
+            <p><strong>📅 Date:</strong> ${data.date}</p>
+            <p><strong>👤 Sender:</strong> ${data.sender}</p>
+            <p><strong>📞 Receiver:</strong> ${data.receiver}</p>
+            <p><strong>📍 Pickup:</strong> ${data.pickup}</p>
+            <p><strong>📦 Drop:</strong> ${data.drop}</p>
+            <p><strong>📑 Details:</strong> ${data.details}</p>
+            <p><strong>📂 GD Copy:</strong> ${data.gdCopy}</p>
+            <p><strong>💸 Local Charges:</strong> ${data.localCharges}</p>
+            <p><strong>🧾 Other Charges:</strong> ${data.otherCharges}</p>
+          </div>
+          <div class="slip-actions">
+            <button onclick="window.print()">🖨️ Print</button>
+            <button onclick="downloadSlipAsPDF(this)">⬇️ Download</button>
+          </div>
+        </div>`;
+    }
+
+    window.downloadSlipAsPDF = function(button) {
+      const slipDiv = button.closest('.booking');
+      html2pdf().from(slipDiv).save(`Slip-${Date.now()}.pdf`);
+    }
+
+    onValue(bookingRef, (snapshot) => {
+      let allData = [];
+      snapshot.forEach((child) => {
+        allData.push(child.val());
+      });
+
+      function render(dataArray) {
+        bookingContainer.innerHTML = dataArray.map(displayBooking).join('');
+      }
+
+      render(allData);
+      totalCount.textContent = `Total Bookings: ${allData.length}`;
+
+      searchInput.addEventListener("input", () => {
+        const searchValue = searchInput.value.toLowerCase();
+        const filtered = allData.filter(b =>
+          b.slipNumber.toLowerCase().includes(searchValue) ||
+          b.sender.toLowerCase().includes(searchValue)
+        );
+        render(filtered);
+      });
+    });
+  </script>
 </body>
 </html>
