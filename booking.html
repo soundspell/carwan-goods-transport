@@ -67,25 +67,25 @@
 
     function displayBooking(data) {
       return `
-        <div class="booking">
+        <div class="booking glass-card">
           <div class="booking-header">
             <h2>📦 Booking Slip</h2>
             <span><strong>Slip #:</strong> ${data.slipNumber}</span>
           </div>
           <div class="booking-body">
-            <p><strong>Date:</strong> ${data.date}</p>
-            <p><strong>Sender:</strong> ${data.sender}</p>
-            <p><strong>Receiver:</strong> ${data.receiver}</p>
-            <p><strong>Pickup Location:</strong> ${data.pickup}</p>
-            <p><strong>Drop Location:</strong> ${data.drop}</p>
-            <p><strong>Details:</strong> ${data.details}</p>
-            <p><strong>GD Copy:</strong> ${data.gdCopy}</p>
-            <p><strong>Local Charges:</strong> ${data.localCharges}</p>
-            <p><strong>Other Charges:</strong> ${data.otherCharges}</p>
+            <p><strong>📅 Date:</strong> ${data.date}</p>
+            <p><strong>👤 Sender:</strong> ${data.sender}</p>
+            <p><strong>📞 Receiver:</strong> ${data.receiver}</p>
+            <p><strong>📍 Pickup:</strong> ${data.pickup}</p>
+            <p><strong>📦 Drop:</strong> ${data.drop}</p>
+            <p><strong>📑 Details:</strong> ${data.details}</p>
+            <p><strong>📂 GD Copy:</strong> ${data.gdCopy}</p>
+            <p><strong>💸 Local Charges:</strong> ${data.localCharges}</p>
+            <p><strong>🧾 Other Charges:</strong> ${data.otherCharges}</p>
           </div>
           <div class="slip-actions">
-            <button onclick="window.print()">🖨️ Print Slip</button>
-            <button onclick="downloadSlipAsPDF(this)">⬇️ Download PDF</button>
+            <button onclick="window.print()">🖨️ Print</button>
+            <button onclick="downloadSlipAsPDF(this)">⬇️ Download</button>
           </div>
         </div>`;
     }
@@ -121,20 +121,20 @@
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #e3f2fd, #fffde7);
+      background: linear-gradient(135deg, #e0f7fa, #fce4ec);
       padding: 20px;
     }
     h1 {
       text-align: center;
-      color: #1e88e5;
-      margin-bottom: 25px;
-      font-size: 2.2rem;
+      color: #6a1b9a;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
     }
     form {
-      background: #ffffff;
+      background: #fff;
       padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       max-width: 800px;
       margin: auto;
     }
@@ -143,11 +143,11 @@
       padding: 14px;
       margin: 12px 0;
       border-radius: 10px;
-      border: 1px solid #90caf9;
+      border: 1px solid #ce93d8;
       font-size: 1rem;
     }
     form button {
-      background-color: #43a047;
+      background-color: #8e24aa;
       color: white;
       border: none;
       cursor: pointer;
@@ -155,16 +155,17 @@
       transition: background-color 0.3s ease;
     }
     form button:hover {
-      background-color: #2e7d32;
+      background-color: #6a1b9a;
     }
-    .booking {
-      background: #ffffff;
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
       padding: 25px;
       margin: 30px auto;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       max-width: 800px;
-      border-left: 8px solid #1e88e5;
+      border-left: 10px solid #ab47bc;
     }
     .booking-header {
       display: flex;
@@ -173,25 +174,25 @@
       margin-bottom: 15px;
     }
     .booking h2 {
-      color: #d84315;
-      font-size: 1.5rem;
+      color: #8e24aa;
+      font-size: 1.6rem;
     }
     .slip-actions {
       margin-top: 18px;
       display: flex;
-      gap: 10px;
+      gap: 12px;
     }
     .slip-actions button {
-      padding: 10px 20px;
+      padding: 12px 22px;
       font-weight: bold;
-      border-radius: 8px;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
-      background-color: #039be5;
+      background-color: #ec407a;
       color: white;
     }
     .slip-actions button:hover {
-      background-color: #0277bd;
+      background-color: #c2185b;
     }
     #searchInput {
       display: block;
@@ -199,12 +200,12 @@
       max-width: 800px;
       padding: 14px;
       font-size: 1rem;
-      border: 1px solid #90caf9;
+      border: 1px solid #ba68c8;
       border-radius: 10px;
     }
     #totalCount {
       text-align: center;
-      color: #00695c;
+      color: #4a148c;
       font-weight: bold;
       font-size: 1.2rem;
       margin-top: 10px;
@@ -212,7 +213,7 @@
   </style>
 </head>
 <body>
-  <h1>New Booking Entry</h1>
+  <h1>🚚 Carwan Booking Entry</h1>
   <form id="bookingForm">
     <input type="date" id="date" required />
     <input type="text" id="sender" placeholder="Sender Name" required />
