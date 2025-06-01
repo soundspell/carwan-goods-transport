@@ -68,20 +68,24 @@
     function displayBooking(data) {
       return `
         <div class="booking">
-          <h2>Booking Slip</h2>
-          <p><strong>Slip #:</strong> ${data.slipNumber}</p>
-          <p><strong>Date:</strong> ${data.date}</p>
-          <p><strong>Sender:</strong> ${data.sender}</p>
-          <p><strong>Receiver:</strong> ${data.receiver}</p>
-          <p><strong>Pickup Location:</strong> ${data.pickup}</p>
-          <p><strong>Drop Location:</strong> ${data.drop}</p>
-          <p><strong>Details:</strong> ${data.details}</p>
-          <p><strong>GD Copy:</strong> ${data.gdCopy}</p>
-          <p><strong>Local Charges:</strong> ${data.localCharges}</p>
-          <p><strong>Other Charges:</strong> ${data.otherCharges}</p>
+          <div class="booking-header">
+            <h2>📦 Booking Slip</h2>
+            <span><strong>Slip #:</strong> ${data.slipNumber}</span>
+          </div>
+          <div class="booking-body">
+            <p><strong>Date:</strong> ${data.date}</p>
+            <p><strong>Sender:</strong> ${data.sender}</p>
+            <p><strong>Receiver:</strong> ${data.receiver}</p>
+            <p><strong>Pickup Location:</strong> ${data.pickup}</p>
+            <p><strong>Drop Location:</strong> ${data.drop}</p>
+            <p><strong>Details:</strong> ${data.details}</p>
+            <p><strong>GD Copy:</strong> ${data.gdCopy}</p>
+            <p><strong>Local Charges:</strong> ${data.localCharges}</p>
+            <p><strong>Other Charges:</strong> ${data.otherCharges}</p>
+          </div>
           <div class="slip-actions">
-            <button onclick="window.print()">Print Slip</button>
-            <button onclick="downloadSlipAsPDF(this)">Download PDF</button>
+            <button onclick="window.print()">🖨️ Print Slip</button>
+            <button onclick="downloadSlipAsPDF(this)">⬇️ Download PDF</button>
           </div>
         </div>`;
     }
@@ -117,20 +121,20 @@
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d);
+      background: linear-gradient(to right, #e3f2fd, #fffde7);
       padding: 20px;
     }
     h1 {
       text-align: center;
-      color: #0d47a1;
-      margin-bottom: 20px;
-      font-size: 2rem;
+      color: #1e88e5;
+      margin-bottom: 25px;
+      font-size: 2.2rem;
     }
     form {
-      background: #fff;
+      background: #ffffff;
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 6px 30px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
       max-width: 800px;
       margin: auto;
     }
@@ -138,49 +142,56 @@
       width: 100%;
       padding: 14px;
       margin: 12px 0;
-      border-radius: 12px;
-      border: 1px solid #64b5f6;
+      border-radius: 10px;
+      border: 1px solid #90caf9;
       font-size: 1rem;
     }
     form button {
-      background-color: #388e3c;
+      background-color: #43a047;
       color: white;
       border: none;
       cursor: pointer;
       font-weight: bold;
+      transition: background-color 0.3s ease;
     }
     form button:hover {
-      background-color: #1b5e20;
+      background-color: #2e7d32;
     }
     .booking {
-      background: white;
+      background: #ffffff;
       padding: 25px;
-      margin: 35px auto;
-      border-radius: 18px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+      margin: 30px auto;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
       max-width: 800px;
-      font-size: 1rem;
+      border-left: 8px solid #1e88e5;
+    }
+    .booking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
     }
     .booking h2 {
-      color: #c62828;
-      margin-bottom: 12px;
+      color: #d84315;
       font-size: 1.5rem;
     }
     .slip-actions {
       margin-top: 18px;
+      display: flex;
+      gap: 10px;
     }
     .slip-actions button {
-      margin-right: 12px;
-      padding: 10px 22px;
+      padding: 10px 20px;
       font-weight: bold;
-      border-radius: 10px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
-      background-color: #2196f3;
+      background-color: #039be5;
       color: white;
     }
     .slip-actions button:hover {
-      background-color: #1565c0;
+      background-color: #0277bd;
     }
     #searchInput {
       display: block;
@@ -188,15 +199,15 @@
       max-width: 800px;
       padding: 14px;
       font-size: 1rem;
-      border: 1px solid #64b5f6;
-      border-radius: 12px;
+      border: 1px solid #90caf9;
+      border-radius: 10px;
     }
     #totalCount {
       text-align: center;
       color: #00695c;
       font-weight: bold;
-      font-size: 1.3rem;
-      margin-top: 15px;
+      font-size: 1.2rem;
+      margin-top: 10px;
     }
   </style>
 </head>
