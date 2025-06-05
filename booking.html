@@ -1,237 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Booking - Carwan Goods Transport</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carwan Goods Transport - Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #fce4ec);
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
       padding: 20px;
     }
-    h1 {
-      text-align: center;
-      color: #6a1b9a;
-      margin-bottom: 30px;
-      font-size: 2.5rem;
-    }
-    form {
-      background: #fff;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      max-width: 800px;
-      margin: auto;
-    }
-    form input, form select, form button {
-      width: 100%;
-      padding: 14px;
-      margin: 12px 0;
-      border-radius: 10px;
-      border: 1px solid #ce93d8;
-      font-size: 1rem;
-    }
-    form button {
-      background-color: #8e24aa;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    form button:hover {
-      background-color: #6a1b9a;
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.8);
+    .booking-container {
+      background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
+      padding: 30px;
       border-radius: 20px;
-      padding: 25px;
-      margin: 30px auto;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      max-width: 800px;
-      border-left: 10px solid #ab47bc;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 1s ease;
+      margin-bottom: 30px;
     }
-    .booking-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    .booking h2 {
-      color: #8e24aa;
-      font-size: 1.6rem;
-    }
-    .slip-actions {
-      margin-top: 18px;
-      display: flex;
-      gap: 12px;
-    }
-    .slip-actions button {
-      padding: 12px 22px;
-      font-weight: bold;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      background-color: #ec407a;
-      color: white;
-    }
-    .slip-actions button:hover {
-      background-color: #c2185b;
-    }
-    #searchInput {
-      display: block;
-      margin: 30px auto 10px;
-      max-width: 800px;
-      padding: 14px;
-      font-size: 1rem;
-      border: 1px solid #ba68c8;
-      border-radius: 10px;
-    }
-    #totalCount {
+    .booking-container h2 {
       text-align: center;
-      color: #4a148c;
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 1.8rem;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+    input::placeholder, textarea::placeholder {
+      color: #999;
+    }
+    button {
+      background: #ffca28;
+      color: #000;
       font-weight: bold;
-      font-size: 1.2rem;
-      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ffc107;
+    }
+    .slip {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 500px;
+      color: #fff;
+      font-size: 0.95rem;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    .slip h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .slip p {
+      margin: 5px 0;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <h1>🚚 Carwan Booking Entry</h1>
-  <form id="bookingForm">
-    <input type="date" id="date" required />
-    <input type="text" id="sender" placeholder="Sender Name" required />
-    <input type="text" id="receiver" placeholder="Receiver Name" required />
-    <input type="text" id="pickup" placeholder="Pickup Location" required />
-    <input type="text" id="drop" placeholder="Drop Location" required />
-    <input type="text" id="details" placeholder="Booking Details" required />
-    <select id="gdCopy">
-      <option value="Yes">GD Copy - Yes</option>
-      <option value="No">GD Copy - No</option>
-    </select>
-    <input type="text" id="localCharges" placeholder="Local Charges" />
-    <input type="text" id="otherCharges" placeholder="Other Charges" />
-    <button type="submit">Submit Booking</button>
-  </form>
+  <div class="booking-container">
+    <h2>📦 Book Your Cargo</h2>
+    <form id="bookingForm">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="text" id="pickup" placeholder="Pickup Location" required>
+      <input type="text" id="drop" placeholder="Drop-off Location" required>
+      <textarea id="details" rows="3" placeholder="Additional Details (Optional)"></textarea>
+      <button type="submit">🚚 Submit Booking</button>
+    </form>
+  </div>
 
-  <input type="text" id="searchInput" placeholder="Search by Slip Number or Sender Name" />
-  <h3 id="totalCount">Total Bookings: 0</h3>
-  <div id="bookingContainer"></div>
+  <div class="slip" id="slipBox" style="display: none;">
+    <h3>Booking Slip</h3>
+    <p><strong>Booking ID:</strong> <span id="slipId"></span></p>
+    <p><strong>Name:</strong> <span id="slipName"></span></p>
+    <p><strong>Email:</strong> <span id="slipEmail"></span></p>
+    <p><strong>Pickup:</strong> <span id="slipPickup"></span></p>
+    <p><strong>Drop-off:</strong> <span id="slipDrop"></span></p>
+    <p><strong>Details:</strong> <span id="slipDetails"></span></p>
+  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  <script>
+    const form = document.getElementById('bookingForm');
+    const slipBox = document.getElementById('slipBox');
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyClRAxD-KJnQX4AxhwjP-c_mZx6cLpe01k",
-      authDomain: "carwan-goods-transport.firebaseapp.com",
-      databaseURL: "https://carwan-goods-transport-default-rtdb.firebaseio.com",
-      projectId: "carwan-goods-transport",
-      storageBucket: "carwan-goods-transport.appspot.com",
-      messagingSenderId: "632307912123",
-      appId: "1:632307912123:web:abdaddb0afadaaf0fcc89e"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const bookingRef = ref(db, 'bookings');
-
-    const bookingForm = document.getElementById('bookingForm');
-    const bookingContainer = document.getElementById('bookingContainer');
-    const searchInput = document.getElementById('searchInput');
-    const totalCount = document.getElementById('totalCount');
-
-    function generateSlipNumber() {
-      return 'SLIP-' + Math.floor(100000 + Math.random() * 900000);
-    }
-
-    bookingForm.addEventListener("submit", (e) => {
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
-      const date = document.getElementById("date").value;
-      const sender = document.getElementById("sender").value;
-      const receiver = document.getElementById("receiver").value;
-      const pickup = document.getElementById("pickup").value;
-      const drop = document.getElementById("drop").value;
-      const details = document.getElementById("details").value;
-      const gdCopy = document.getElementById("gdCopy").value;
-      const localCharges = document.getElementById("localCharges").value;
-      const otherCharges = document.getElementById("otherCharges").value;
-      const slipNumber = generateSlipNumber();
 
-      const data = {
-        date,
-        sender,
-        receiver,
-        pickup,
-        drop,
-        details,
-        gdCopy,
-        localCharges,
-        otherCharges,
-        slipNumber
-      };
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const pickup = document.getElementById('pickup').value;
+      const drop = document.getElementById('drop').value;
+      const details = document.getElementById('details').value;
+      const bookingId = 'BKG-' + Math.floor(100000 + Math.random() * 900000);
 
-      push(bookingRef, data).then(() => {
-        alert("Booking added successfully!");
-        bookingForm.reset();
-      });
-    });
+      document.getElementById('slipId').innerText = bookingId;
+      document.getElementById('slipName').innerText = name;
+      document.getElementById('slipEmail').innerText = email;
+      document.getElementById('slipPickup').innerText = pickup;
+      document.getElementById('slipDrop').innerText = drop;
+      document.getElementById('slipDetails').innerText = details;
 
-    function displayBooking(data) {
-      return `
-        <div class="booking glass-card">
-          <div class="booking-header">
-            <h2>📦 Booking Slip</h2>
-            <span><strong>Slip #:</strong> ${data.slipNumber}</span>
-          </div>
-          <div class="booking-body">
-            <p><strong>📅 Date:</strong> ${data.date}</p>
-            <p><strong>👤 Sender:</strong> ${data.sender}</p>
-            <p><strong>📞 Receiver:</strong> ${data.receiver}</p>
-            <p><strong>📍 Pickup:</strong> ${data.pickup}</p>
-            <p><strong>📦 Drop:</strong> ${data.drop}</p>
-            <p><strong>📑 Details:</strong> ${data.details}</p>
-            <p><strong>📂 GD Copy:</strong> ${data.gdCopy}</p>
-            <p><strong>💸 Local Charges:</strong> ${data.localCharges}</p>
-            <p><strong>🧾 Other Charges:</strong> ${data.otherCharges}</p>
-          </div>
-          <div class="slip-actions">
-            <button onclick="window.print()">🖨️ Print</button>
-            <button onclick="downloadSlipAsPDF(this)">⬇️ Download</button>
-          </div>
-        </div>`;
-    }
-
-    window.downloadSlipAsPDF = function(button) {
-      const slipDiv = button.closest('.booking');
-      html2pdf().from(slipDiv).save(`Slip-${Date.now()}.pdf`);
-    }
-
-    onValue(bookingRef, (snapshot) => {
-      let allData = [];
-      snapshot.forEach((child) => {
-        allData.push(child.val());
-      });
-
-      function render(dataArray) {
-        bookingContainer.innerHTML = dataArray.map(displayBooking).join('');
-      }
-
-      render(allData);
-      totalCount.textContent = `Total Bookings: ${allData.length}`;
-
-      searchInput.addEventListener("input", () => {
-        const searchValue = searchInput.value.toLowerCase();
-        const filtered = allData.filter(b =>
-          b.slipNumber.toLowerCase().includes(searchValue) ||
-          b.sender.toLowerCase().includes(searchValue)
-        );
-        render(filtered);
-      });
+      slipBox.style.display = 'block';
+      form.reset();
     });
   </script>
 </body>
