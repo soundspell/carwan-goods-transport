@@ -73,6 +73,7 @@
       color: #fff;
       font-size: 1rem;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: none;
     }
     .slip h3 {
       text-align: center;
@@ -82,6 +83,9 @@
     }
     .slip p {
       margin: 8px 0;
+    }
+    .search-container {
+      margin-bottom: 20px;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -93,7 +97,8 @@
   <div class="booking-container">
     <h2>📦 Book Your Cargo</h2>
     <form id="bookingForm">
-      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="text" id="name" placeholder="Sender Full Name" required>
+      <input type="text" id="receiver" placeholder="Receiver Full Name" required>
       <input type="email" id="email" placeholder="Email Address" required>
       <input type="text" id="pickup" placeholder="Pickup Location" required>
       <input type="text" id="drop" placeholder="Drop-off Location" required>
@@ -108,10 +113,16 @@
     </form>
   </div>
 
-  <div class="slip" id="slipBox" style="display: none;">
+  <div class="search-container">
+    <input type="text" id="searchBookingId" placeholder="Search Booking ID">
+    <button onclick="searchBooking()">🔍 Search</button>
+  </div>
+
+  <div class="slip" id="slipBox">
     <h3>Booking Slip</h3>
     <p><strong>Booking ID:</strong> <span id="slipId"></span></p>
-    <p><strong>Name:</strong> <span id="slipName"></span></p>
+    <p><strong>Sender Name:</strong> <span id="slipName"></span></p>
+    <p><strong>Receiver Name:</strong> <span id="slipReceiver"></span></p>
     <p><strong>Email:</strong> <span id="slipEmail"></span></p>
     <p><strong>Pickup:</strong> <span id="slipPickup"></span></p>
     <p><strong>Drop-off:</strong> <span id="slipDrop"></span></p>
@@ -119,16 +130,19 @@
     <p><strong>GD Copy:</strong> <span id="slipGD"></span></p>
     <p><strong>Local Charges:</strong> <span id="slipLocal"></span></p>
     <p><strong>Other Charges:</strong> <span id="slipOther"></span></p>
+    <button onclick="window.print()">🖨️ Print Slip</button>
   </div>
 
   <script>
     const form = document.getElementById('bookingForm');
     const slipBox = document.getElementById('slipBox');
+    let bookings = {};
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
 
       const name = document.getElementById('name').value;
+      const receiver = document.getElementById('receiver').value;
       const email = document.getElementById('email').value;
       const pickup = document.getElementById('pickup').value;
       const drop = document.getElementById('drop').value;
@@ -138,19 +152,40 @@
       const otherCharges = document.getElementById('otherCharges').value;
       const bookingId = 'BKG-' + Math.floor(100000 + Math.random() * 900000);
 
-      document.getElementById('slipId').innerText = bookingId;
-      document.getElementById('slipName').innerText = name;
-      document.getElementById('slipEmail').innerText = email;
-      document.getElementById('slipPickup').innerText = pickup;
-      document.getElementById('slipDrop').innerText = drop;
-      document.getElementById('slipDetails').innerText = details;
-      document.getElementById('slipGD').innerText = gdCopy;
-      document.getElementById('slipLocal').innerText = localCharges + ' PKR';
-      document.getElementById('slipOther').innerText = otherCharges + ' PKR';
+      bookings[bookingId] = {
+        name, receiver, email, pickup, drop, details, gdCopy, localCharges, otherCharges
+      };
 
-      slipBox.style.display = 'block';
+      showSlip(bookingId);
       form.reset();
     });
+
+    function showSlip(id) {
+      const data = bookings[id];
+      if (!data) return alert("Booking not found");
+
+      document.getElementById('slipId').innerText = id;
+      document.getElementById('slipName').innerText = data.name;
+      document.getElementById('slipReceiver').innerText = data.receiver;
+      document.getElementById('slipEmail').innerText = data.email;
+      document.getElementById('slipPickup').innerText = data.pickup;
+      document.getElementById('slipDrop').innerText = data.drop;
+      document.getElementById('slipDetails').innerText = data.details;
+      document.getElementById('slipGD').innerText = data.gdCopy;
+      document.getElementById('slipLocal').innerText = data.localCharges + ' PKR';
+      document.getElementById('slipOther').innerText = data.otherCharges + ' PKR';
+
+      slipBox.style.display = 'block';
+    }
+
+    function searchBooking() {
+      const searchId = document.getElementById('searchBookingId').value.trim();
+      if (bookings[searchId]) {
+        showSlip(searchId);
+      } else {
+        alert("No booking found with this ID.");
+      }
+    }
   </script>
 </body>
 </html>
