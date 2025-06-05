@@ -6,72 +6,82 @@
   <title>Carwan Goods Transport - Booking</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: #fff;
+      margin: 0;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
-      padding: 20px;
     }
     .booking-container {
       background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 30px;
+      backdrop-filter: blur(12px);
+      padding: 40px 30px;
       border-radius: 20px;
       width: 100%;
-      max-width: 500px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      animation: fadeIn 1s ease;
+      max-width: 600px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
       margin-bottom: 30px;
+      animation: fadeIn 1s ease;
     }
     .booking-container h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       font-weight: 600;
-      font-size: 1.8rem;
+      font-size: 2rem;
+      color: #ffca28;
     }
-    input, textarea, button {
+    input, textarea, button, select {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
+      padding: 14px;
+      margin-bottom: 20px;
       border: none;
       border-radius: 10px;
       font-size: 1rem;
       font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
     }
-    input::placeholder, textarea::placeholder {
-      color: #999;
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      background-color: #f8f8f8;
+      color: #000;
     }
     button {
       background: #ffca28;
       color: #000;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: transform 0.2s ease;
     }
     button:hover {
       background: #ffc107;
+      transform: scale(1.02);
     }
     .slip {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
       border-radius: 15px;
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
       color: #fff;
-      font-size: 0.95rem;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      font-size: 1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
     .slip h3 {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      color: #ffca28;
     }
     .slip p {
-      margin: 5px 0;
+      margin: 8px 0;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -88,6 +98,12 @@
       <input type="text" id="pickup" placeholder="Pickup Location" required>
       <input type="text" id="drop" placeholder="Drop-off Location" required>
       <textarea id="details" rows="3" placeholder="Additional Details (Optional)"></textarea>
+      <select id="gdCopy">
+        <option value="Yes">GD Copy: Yes</option>
+        <option value="No">GD Copy: No</option>
+      </select>
+      <input type="number" id="localCharges" placeholder="Local Charges (PKR)" required>
+      <input type="number" id="otherCharges" placeholder="Other Charges (PKR)" required>
       <button type="submit">🚚 Submit Booking</button>
     </form>
   </div>
@@ -100,6 +116,9 @@
     <p><strong>Pickup:</strong> <span id="slipPickup"></span></p>
     <p><strong>Drop-off:</strong> <span id="slipDrop"></span></p>
     <p><strong>Details:</strong> <span id="slipDetails"></span></p>
+    <p><strong>GD Copy:</strong> <span id="slipGD"></span></p>
+    <p><strong>Local Charges:</strong> <span id="slipLocal"></span></p>
+    <p><strong>Other Charges:</strong> <span id="slipOther"></span></p>
   </div>
 
   <script>
@@ -114,6 +133,9 @@
       const pickup = document.getElementById('pickup').value;
       const drop = document.getElementById('drop').value;
       const details = document.getElementById('details').value;
+      const gdCopy = document.getElementById('gdCopy').value;
+      const localCharges = document.getElementById('localCharges').value;
+      const otherCharges = document.getElementById('otherCharges').value;
       const bookingId = 'BKG-' + Math.floor(100000 + Math.random() * 900000);
 
       document.getElementById('slipId').innerText = bookingId;
@@ -122,6 +144,9 @@
       document.getElementById('slipPickup').innerText = pickup;
       document.getElementById('slipDrop').innerText = drop;
       document.getElementById('slipDetails').innerText = details;
+      document.getElementById('slipGD').innerText = gdCopy;
+      document.getElementById('slipLocal').innerText = localCharges + ' PKR';
+      document.getElementById('slipOther').innerText = otherCharges + ' PKR';
 
       slipBox.style.display = 'block';
       form.reset();
